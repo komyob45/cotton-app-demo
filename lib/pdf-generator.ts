@@ -1,6 +1,5 @@
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
-import QRCode from "qrcode"
 import type { Batch } from "@/components/cotton-batch-manager"
 
 // Функция для форматирования даты
@@ -51,32 +50,6 @@ export const generatePDF = async (
   // Добавляем заголовок
   doc.setFontSize(20)
   doc.text("Raschet partiy khlopka", 14, 22) // Используем транслитерацию
-
-  // Генерируем QR-код для текущего URL
-  const currentUrl = typeof window !== "undefined" ? window.location.href : ""
-
-  try {
-    // Проверяем, что мы находимся в браузере
-    if (typeof window !== "undefined") {
-      // Генерируем QR-код как Data URL
-      const qrCodeDataUrl = await QRCode.toDataURL(currentUrl, {
-        width: 100,
-        margin: 1,
-      })
-
-      // Добавляем QR-код в правый верхний угол, но с отступом от контента
-      doc.addImage(qrCodeDataUrl, "PNG", 150, 15, 30, 30)
-
-      // Добавляем подпись под QR-кодом
-      doc.setFontSize(8)
-      doc.text("Scan dlya dostupa", 165, 50, { align: "center" })
-    } else {
-      console.log("QR code generation skipped - not in browser environment")
-    }
-  } catch (error) {
-    console.error("Error generating QR code:", error)
-    // Продолжаем без QR-кода
-  }
 
   // Добавляем информацию о расчете
   doc.setFontSize(12)

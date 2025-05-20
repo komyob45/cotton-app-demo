@@ -8,17 +8,10 @@ import { QrCode, FileText, Calendar, DollarSign } from "lucide-react"
 import Link from "next/link"
 import { BatchItem } from "@/components/batch-item"
 import { TotalStats } from "@/components/total-stats"
-// Обновляем импорт QRCode, чтобы использовать динамический импорт с отключенным SSR
-import dynamic from "next/dynamic"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { generatePDF } from "@/lib/pdf-generator"
 import { TextExport } from "@/components/text-export"
-
-// Заменяем использование QRCode на QRCodeWrapper
-import { QRCodeWrapper } from "@/components/qr-code-wrapper"
-
-// Заменяем прямой импорт QRCode на динамический импорт
-const QRCode = dynamic(() => import("qrcode.react"), { ssr: false })
+import { QRCode } from "@/components/qr-code"
 
 export default function CalculationPage() {
   const params = useParams()
@@ -224,7 +217,7 @@ export default function CalculationPage() {
             <DialogDescription>Отсканируйте этот QR-код для быстрого доступа к данному расчету</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center p-4">
-            <QRCodeWrapper value={calculationUrl} size={200} />
+            <QRCode value={calculationUrl} size={200} />
             <p className="mt-4 text-sm text-center text-muted-foreground break-all">{calculationUrl}</p>
           </div>
         </DialogContent>
