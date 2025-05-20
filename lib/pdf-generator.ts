@@ -56,20 +56,26 @@ export const generatePDF = async (
   const currentUrl = typeof window !== "undefined" ? window.location.href : ""
 
   try {
-    // Генерируем QR-код как Data URL
-    const qrCodeDataUrl = await QRCode.toDataURL(currentUrl, {
-      width: 100,
-      margin: 1,
-    })
+    // Проверяем, что мы находимся в браузере
+    if (typeof window !== "undefined") {
+      // Генерируем QR-код как Data URL
+      const qrCodeDataUrl = await QRCode.toDataURL(currentUrl, {
+        width: 100,
+        margin: 1,
+      })
 
-    // Добавляем QR-код в правый верхний угол, но с отступом от контента
-    doc.addImage(qrCodeDataUrl, "PNG", 150, 15, 30, 30)
+      // Добавляем QR-код в правый верхний угол, но с отступом от контента
+      doc.addImage(qrCodeDataUrl, "PNG", 150, 15, 30, 30)
 
-    // Добавляем подпись под QR-кодом
-    doc.setFontSize(8)
-    doc.text("Scan dlya dostupa", 165, 50, { align: "center" })
+      // Добавляем подпись под QR-кодом
+      doc.setFontSize(8)
+      doc.text("Scan dlya dostupa", 165, 50, { align: "center" })
+    } else {
+      console.log("QR code generation skipped - not in browser environment")
+    }
   } catch (error) {
     console.error("Error generating QR code:", error)
+    // Продолжаем без QR-кода
   }
 
   // Добавляем информацию о расчете

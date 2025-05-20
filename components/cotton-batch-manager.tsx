@@ -9,9 +9,16 @@ import { Input } from "@/components/ui/input"
 import { TotalStats } from "./total-stats"
 import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import QRCode from "qrcode.react"
+// Обновляем импорт QRCode, чтобы использовать динамический импорт с отключенным SSR
+import dynamic from "next/dynamic"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+
+// Заменяем использование QRCode на QRCodeWrapper
+import { QRCodeWrapper } from "@/components/qr-code-wrapper"
+
+// Заменяем прямой импорт QRCode на динамический импорт
+const QRCode = dynamic(() => import("qrcode.react"), { ssr: false })
 
 export type Batch = {
   id: string
@@ -54,7 +61,7 @@ export function CottonBatchManager() {
   const [showQRCode, setShowQRCode] = useState(false)
   const [calculationUrl, setCalculationUrl] = useState("")
   const [isLoadingQuotation, setIsLoadingQuotation] = useState(false)
-  const [isLoadingRate, setIsLoadingRate] = useState(false)
+  const [isLoadingRate, setIsLoadingRate] = useState(false) // Объявляем переменную
   const [quotationError, setQuotationError] = useState<string | null>(null)
   const [rateError, setRateError] = useState<string | null>(null)
   const [quotationSource, setQuotationSource] = useState<string | null>(null)
@@ -587,7 +594,7 @@ export function CottonBatchManager() {
               />
             </div>
             <div className="flex flex-col items-center justify-center p-4">
-              <QRCode value={calculationUrl} size={200} />
+              <QRCodeWrapper value={calculationUrl} size={200} />
               <p className="mt-4 text-sm text-center text-muted-foreground break-all">{calculationUrl}</p>
             </div>
             <div className="flex justify-end gap-2">
